@@ -6,16 +6,16 @@
 
     if(isset($_POST['btnsubmit']))
     {
-      $product_name = $_POST['product_name'];  // Product name
-      $product_description = $_POST['product_description'];  // Product description
-      $product_cost = $_POST['product_cost'];  // Product cost
-      $category_id = $_POST['category_id'];  // Category id
+      // $product_name = $_POST['product_name'];  // Product name
+      // $product_description = $_POST['product_description'];  // Product description
+      // $product_cost = $_POST['product_cost'];  // Product cost
+      // $category_id = $_POST['category_id'];  // Category id
       // $product_image = $_POST['product_image'];  // Product image
 
-      // $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
-      // $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
-      // $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
-      // $product_cost = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_NUMBER_FLOAT);
+      $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
+      $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
+      $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
+      $product_cost = filter_input(INPUT_POST, 'product_cost', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
       $imgFile = $_FILES['product_image']['name'];
       $tmp_dir = $_FILES['product_image']['tmp_name'];

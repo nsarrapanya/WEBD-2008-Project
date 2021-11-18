@@ -1,7 +1,7 @@
 <?php
     require('connect.php');
 
-    $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id';
+    $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_id';
 
     $statement = $db->prepare($query);
     $statement->execute();
