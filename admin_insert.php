@@ -102,47 +102,16 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-    <script src="js/bootstrap.bundle.js"></script>
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">Dee's Nuts</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Botanical Nuts</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Drupes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Gymnosperm</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Angiosperm</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#adminModal">Admin</a>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-    <!-- Modal -->
+    <?php include('header.php')?>
+    <!-- Admin Modal -->
     <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Administrator</h5>
+            <h5 class="modal-title" id="adminModal">Administrator</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -159,17 +128,23 @@
     </div>
     <!-- Form -->
     <div class="container">
-      <form method="post" enctype="multipart/form-data" class="form-horizontal">
+      <form method="post" enctype="multipart/form-data" class="form-horizontal needs-validation">
         <h1 class="display-6">Add a new product</h1>
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
-          <input type="text" class="form-control" name="product_name">
+          <input type="text" class="form-control" name="product_name" required>
+          <div id="productNameValidation" class="invalid-feedback">
+            Please enter a product name.
+          </div>
         </div>
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
-          <textarea class="form-control" name="product_description" rows="3"></textarea>
+          <textarea class="form-control" name="product_description" rows="3" required></textarea>
+          <div id="productDescValidation" class="invalid-feedback">
+            Please enter a product description.
+          </div>
         </div>
         <!-- Category id -->
         <div class="input-group mb-3">
@@ -185,14 +160,44 @@
         <!-- <label class="form-label">Product cost</label> -->
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
-          <input type="text" class="form-control" name="product_cost" accept="image/*">
+          <input type="text" class="form-control" name="product_cost" required>
+          <div id="productCostValidation" class="invalid-feedback">
+            Please enter a product cost.
+          </div>
         </div>
         <!-- Product image -->
         <div class="input-group mb-3">
-          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image">
+          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*" required>
+          <div id="productImageValidation" class="invalid-feedback">
+            Please provide a product image.
+          </div>
         </div>
         <button type="submit" class="btn btn-success" name="btnsubmit">Submit</button>
+        <button type="button" class="btn btn-warning" name="btncancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
       </form>
     </div>
+    <!-- Cancel Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cancelModal">Wanring!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to cancel?
+          </div>
+          <!-- Buttons -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='index.php'">Yes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap scripts -->
+    <script src="js/bootstrap.bundle.js"></script>
+    <!-- Custom scripts -->
+    <!-- <script src="js/scripts.js"></script> -->
   </body>
 </html>

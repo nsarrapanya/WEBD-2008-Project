@@ -6,12 +6,16 @@
 
     if(isset($_GET['product_id']) && !empty($_GET['product_id']))
     {
-      $id = $_GET['product_id'];
+      // $id = $_GET['product_id'];
+      $id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
-      $query = 'SELECT * FROM products WHERE product_id = :product_id';
-
+      $query = 'SELECT * FROM products WHERE product_id=:product_id';
       $statement = $db->prepare($query);
+
+      $statement->bindParam(':product_id', $id, PDO::PARAM_INT);
+
       $statement->execute(array(':product_id'=>$id));
+
       $row = $statement->fetch(PDO::FETCH_ASSOC);
       extract($row);
     }
@@ -20,18 +24,19 @@
       header("Location: index.php");
     }
 
-    if(isset($_POST['btnsubmit']))
+    if (isset($_POST['btnsubmit']))
+    // if ($_POST && !empty($_POST['product_id']) && !empty($_POST['product_name']) && !empty($_POST['product_description']) && !empty($_POST['category_id']) && !empty($_POST['product_name']))
     {
-      $product_name = $_POST['product_name'];  // Product name
-      $product_description = $_POST['product_description'];  // Product description
-      $category_id = $_POST['category_id'];  // Category id
-      $product_cost = $_POST['product_cost'];  // Product cost
+      // $product_name = $_POST['product_name'];  // Product name
+      // $product_description = $_POST['product_description'];  // Product description
+      // $category_id = $_POST['category_id'];  // Category id
+      // $product_cost = $_POST['product_cost'];  // Product cost
       // $product_image = $_POST['product_image'];  // Product image
 
-      // $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
-      // $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
-      // $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
-      // $product_cost = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_NUMBER_FLOAT);
+      $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
+      $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
+      $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
+      $product_cost = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_NUMBER_FLOAT);
 
       $imgFile = $_FILES['product_image']['name'];
       $tmp_dir = $_FILES['product_image']['tmp_name'];
@@ -43,7 +48,7 @@
 
         $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
 
-        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif'); // valid extensions
+        $valid_extensions = array('jpeg', 'jpg', 'png'); // valid extensions
 
         $product_image = rand(1000,1000000).".".$imgExt;
         if(in_array($imgExt, $valid_extensions))
@@ -60,7 +65,7 @@
        }
        else
        {
-         $errMSG = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+         $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
        }
       }
       else
@@ -72,7 +77,7 @@
       // if no error occured, continue ....
       if(!isset($errMSG))
       {
-        $query = 'UPDATE products SET product_name:=product_name, product_description:=product_description, product_cost:=product_cost, product_image:=product_image, category_id:=category_id WHERE product_id:=product_id';
+        $query = 'UPDATE products SET product_name:=product_name, product_description=:product_description, product_cost=:product_cost, product_image=:product_image, category_id=:category_id WHERE product_id=:product_id';
 
         $statement = $db->prepare($query);
         $statement->bindParam(':product_name', $product_name);
@@ -80,7 +85,9 @@
         $statement->bindParam(':product_cost', $product_cost);
         $statement->bindParam(':product_image', $product_image);
         $statement->bindParam(':category_id', $category_id);
-        $statement->bindParam(':product_id',$id);
+        $statement->bindParam(':product_id', $id, PDO::PARAM_INT);
+
+        $statement->execute();
 
         if($statement->execute())
         {
@@ -110,43 +117,13 @@
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">Dee's Nuts</a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Botanical Nuts</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Drupes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Gymnosperm</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Angiosperm</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#adminModal">Admin</a>
-            </li>
-          </ul>
-          <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-    <!-- Modal -->
+    <?php include('header.php')?>
+    <!-- Admin Modal -->
     <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Administrator</h5>
+            <h5 class="modal-title" id="adminModal">Administrator</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -163,17 +140,25 @@
     </div>
     <!-- Form -->
     <div class="container">
-      <form method="post" enctype="multipart/form-data" class="form-horizontal">
+      <form method="post" enctype="multipart/form-data" class="form-horizontal needs-validation">
+        <input type="hidden" name="product_id" value="<?= $row['product_id']?>">
+
         <h1 class="display-6">Edit <?= $row['product_name']?></h1>
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
-          <input type="text" class="form-control" name="product_name" value="<?= $row['product_name']?>">
+          <input type="text" class="form-control" name="product_name" value="<?= $row['product_name']?>" required>
+          <div id="productNameValidation" class="invalid-feedback">
+            Please enter a product name.
+          </div>
         </div>
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
-          <textarea class="form-control" name="product_description" rows="3"><?= $row['product_description']?></textarea>
+          <textarea class="form-control" name="product_description" rows="3"><?= $row['product_description']? required></textarea>
+          <div id="productDescValidation" class="invalid-feedback">
+            Please enter a product description.
+          </div>
         </div>
         <!-- Category id -->
         <div class="input-group mb-3">
@@ -189,15 +174,41 @@
         <!-- <label class="form-label">Product cost</label> -->
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
-          <input type="text" class="form-control" name="product_cost" accept="image/*" value="<?= $row['product_cost']?>">
+          <input type="text" class="form-control" name="product_cost" value="<?= $row['product_cost']?>" required>
+          <div id="productCostValidation" class="invalid-feedback">
+            Please enter a product cost.
+          </div>
         </div>
         <!-- Product image -->
         <div class="input-group mb-3">
-          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image">
+          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*" required>
+          <div id="productImageValidation" class="invalid-feedback">
+            Please provide a product image.
+          </div>
         </div>
         <button type="submit" class="btn btn-success" name="btnsubmit">Submit</button>
         <button type="submit" class="btn btn-danger" name="btndelete" formaction="delete.php">Delete</button>
+        <button type="button" class="btn btn-warning" name="btncancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
       </form>
+    </div>
+    <!-- Cancel Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cancelModal">Wanring!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to cancel?
+          </div>
+          <!-- Buttons -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='index.php'">Yes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
