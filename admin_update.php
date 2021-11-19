@@ -7,14 +7,14 @@
     if(isset($_GET['product_id']) && !empty($_GET['product_id']))
     {
       // $id = $_GET['product_id'];
-      $id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
+      $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM products WHERE product_id=:product_id';
       $statement = $db->prepare($query);
 
-      $statement->bindParam(':product_id', $id, PDO::PARAM_INT);
+      $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
-      $statement->execute(array(':product_id'=>$id));
+      $statement->execute(array(':product_id'=>$product_id));
 
       $row = $statement->fetch(PDO::FETCH_ASSOC);
       extract($row);
@@ -85,7 +85,7 @@
         $statement->bindParam(':product_cost', $product_cost);
         $statement->bindParam(':product_image', $product_image);
         $statement->bindParam(':category_id', $category_id);
-        $statement->bindParam(':product_id', $id, PDO::PARAM_INT);
+        $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
         $statement->execute();
 
@@ -155,7 +155,7 @@
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
-          <textarea class="form-control" name="product_description" rows="3"><?= $row['product_description']? required></textarea>
+          <textarea class="form-control" name="product_description" rows="3"><?= $row['product_description']?></textarea>
           <div id="productDescValidation" class="invalid-feedback">
             Please enter a product description.
           </div>
@@ -181,7 +181,7 @@
         </div>
         <!-- Product image -->
         <div class="input-group mb-3">
-          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*" required>
+          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*">
           <div id="productImageValidation" class="invalid-feedback">
             Please provide a product image.
           </div>

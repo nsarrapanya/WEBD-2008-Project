@@ -167,7 +167,7 @@
         </div>
         <!-- Product image -->
         <div class="input-group mb-3">
-          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*" required>
+          <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*">
           <div id="productImageValidation" class="invalid-feedback">
             Please provide a product image.
           </div>

@@ -1,18 +1,21 @@
 <?php
     require('connect.php');
 
-    $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_id';
+    if(isset($_GET['product_id']) && !empty($_GET['product_id']))
+    {
+      // $id = $_GET['product_id'];
+      $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
-    $statement = $db->prepare($query);
-    $statement->execute();
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE product_id=:product_id';
+      $statement = $db->prepare($query);
 
-    // if($statement->rowCount() > 0)
-    // {
-    //  while($row=$statement->fetch(PDO::FETCH_ASSOC))
-    //  {
-    //   extract($row);
-    //   }
-    // }
+      $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+
+      $statement->execute(array(':product_id'=>$product_id));
+
+      // $row = $statement->fetch(PDO::FETCH_ASSOC);
+      // extract($row);
+    }
 ?>
  <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -48,8 +51,9 @@
     </div>
     <!-- Container -->
     <div class="container">
-      <div class="row row-cols-3">
-        <?php include('container.php')?>
+      <div class="row row-cols-2">
+        <?php include('review_container.php')?>
+        <?php include('review.php')?>
       </div>
     </div>
     <!-- Bootstrap scripts -->

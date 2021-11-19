@@ -47,7 +47,11 @@
       </div>
     </div>
     <!-- Container -->
-    <?php include('container.php')?>
+    <div class="container">
+      <div class="row row-cols-3">
+        <?php include('container.php')?>
+      </div>
+    </div>
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
     <!-- Custom scripts -->
