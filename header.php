@@ -1,7 +1,3 @@
-<?php
-    require('login.php');
-?>
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -67,14 +63,14 @@
   </div>
 </div>
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+<form class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" action="login.php" method="post">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Login</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form class="modal-body" action="login.php" method="post">
+      <div class="modal-body">
         <div class="row mb-3">
           <label class="col-sm-2 col-form-label">Username</label>
           <div class="col-sm-10">
@@ -90,12 +86,11 @@
         <div class="row mb-3">
           <p>Don't have an account? <a href="register.php" class="text-decoration-none">Register</a></p>
         </div>
-      </form>
-      <!-- Buttons -->
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" name="btnLogin">Login</button>
+        <button type="submit" class="btn btn-primary" name="btnLogin">Login</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
-</div>
+</form>
