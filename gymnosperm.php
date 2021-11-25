@@ -26,26 +26,7 @@
   <body>
     <!-- Navbar -->
     <?php include('header.php')?>
-    <!-- Modal -->
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Administrator</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            What would you like to do? You will be asked for a username and password to make any changes.
-          </div>
-          <!-- Buttons -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="window.location.href='admin_edit.php'">Edit product</button>
-            <button type="button" class="btn btn-primary" onclick="window.location.href='admin_insert.php'">Add products</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Container -->
     <div class="container">
       <div class="row row-cols-3">

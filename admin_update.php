@@ -24,7 +24,7 @@
       header("Location: index.php");
     }
 
-    if (isset($_POST['btnsubmit']))
+    if (isset($_POST['btnSubmit']))
     // if ($_POST && !empty($_POST['product_id']) && !empty($_POST['product_name']) && !empty($_POST['product_description']) && !empty($_POST['category_id']) && !empty($_POST['product_name']))
     {
       // $product_name = $_POST['product_name'];  // Product name
@@ -36,7 +36,7 @@
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
       $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
       $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
-      $product_cost = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_NUMBER_FLOAT);
+      $product_cost = filter_input(INPUT_POST, 'product_cost', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
       $imgFile = $_FILES['product_image']['name'];
       $tmp_dir = $_FILES['product_image']['tmp_name'];
@@ -77,7 +77,7 @@
       // if no error occured, continue ....
       if(!isset($errMSG))
       {
-        $query = 'UPDATE products SET product_name:=product_name, product_description=:product_description, product_cost=:product_cost, product_image=:product_image, category_id=:category_id WHERE product_id=:product_id';
+        $query = 'UPDATE products SET product_name=:product_name, product_description=:product_description, product_cost=:product_cost, product_image=:product_image, category_id=:category_id WHERE product_id=:product_id';
 
         $statement = $db->prepare($query);
         $statement->bindParam(':product_name', $product_name);
@@ -87,16 +87,9 @@
         $statement->bindParam(':category_id', $category_id);
         $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
-        $statement->execute();
-
         if($statement->execute())
         {
-        ?>
-                    <script>
-        alert('Successfully Updated ...');
-        window.location.href='index.php';
-        </script>
-                    <?php
+          header("Location: admin_edit.php");
         }
         else
         {
@@ -118,36 +111,17 @@
   <body>
     <!-- Navbar -->
     <?php include('header.php')?>
-    <!-- Admin Modal -->
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="adminModal">Administrator</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            What would you like to do? You will be asked for a username and password to make any changes.
-          </div>
-          <!-- Buttons -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="window.location.href='admin_edit.php'">Edit product</button>
-            <button type="button" class="btn btn-primary" onclick="window.location.href='admin_insert.php'">Add products</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Form -->
     <div class="container">
-      <form method="post" enctype="multipart/form-data" class="form-horizontal needs-validation">
+      <form method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="product_id" value="<?= $row['product_id']?>">
 
         <h1 class="display-6">Edit <?= $row['product_name']?></h1>
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
-          <input type="text" class="form-control" name="product_name" value="<?= $row['product_name']?>" required>
+          <input type="text" class="form-control" name="product_name" value="<?= $row['product_name']?>">
           <div id="productNameValidation" class="invalid-feedback">
             Please enter a product name.
           </div>
@@ -174,7 +148,7 @@
         <!-- <label class="form-label">Product cost</label> -->
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
-          <input type="text" class="form-control" name="product_cost" value="<?= $row['product_cost']?>" required>
+          <input type="text" class="form-control" name="product_cost" value="<?= $row['product_cost']?>">
           <div id="productCostValidation" class="invalid-feedback">
             Please enter a product cost.
           </div>
@@ -186,9 +160,9 @@
             Please provide a product image.
           </div>
         </div>
-        <button type="submit" class="btn btn-success" name="btnsubmit">Submit</button>
-        <button type="submit" class="btn btn-danger" name="btndelete" formaction="delete.php">Delete</button>
-        <button type="button" class="btn btn-warning" name="btncancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+        <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
+        <button type="submit" class="btn btn-danger" name="btnDelete" formaction="delete.php?product_id=<?= $row['product_id']?>">Delete</button>
+        <button type="button" class="btn btn-warning" name="btnCancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
       </form>
     </div>
     <!-- Cancel Modal -->

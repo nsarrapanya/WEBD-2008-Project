@@ -6,8 +6,8 @@
       // select image from db to delete
       $query = 'SELECT product_image FROM products WHERE product_id=:product_id';
 
-      $statement = $db->prepare();
-      $statement->execute(array(':product_id'=>$_GET['product_id']));
+      $statement = $db->prepare($query);
+      $statement->execute(array(':product_id'=>$id));
       $row=$statement->fetch(PDO::FETCH_ASSOC);
       unlink("images/".$row['product_image']);
 
@@ -16,10 +16,13 @@
 
       $statement = $db->prepare($query);
       $statement->bindParam(':product_id',$_GET['product_id']);
-      $statement->execute();
+
+      if($statement->execute())
+      {
 
       header("Location: index.php");
       exit();
+      }
     }
 
     // // Sanitized
