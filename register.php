@@ -1,7 +1,7 @@
 <?php
     require('connect.php');
 
-    if(isset($_POST['btnregister']))
+    if(isset($_POST['btnRegister']))
     {
       // customer information fieldset
       $fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
@@ -9,67 +9,107 @@
       $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
       $postal = filter_input(INPUT_POST, 'postal', FILTER_VALIDATE_REGEXP, array(
           "options" => array(
-              "regexp" => "/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i",
-          )
-      ));
+            "regexp" => '/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i')
+          ));
       // $province = filter_input(INPUT_POST, 'province', FILTER_SANITIZE_STRING);
       $phone_number = filter_input(INPUT_POST, 'phone_number', FILTER_SANITIZE_NUMBER_INT);
+      $city = filter_input(INPUT_POST, 'city', FILTER_SANITIZE_STRING);
       // login information fieldset
       $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
       $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+      // $retype_password = filter_input(INPUT_POST, 'retype_password', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
       $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
-      $fields = [$fname, $lname, $address, $postal, $phone_number, $username, $password, $email];
+      // $arr = [$fname, $lname, $address, $postal, $phone_number, $username, $password, $email];
 
-      for($i=0; $i<count($fields); $i++)
-      {
-        if(empty($fields)) {
-          $errMSG = "Field(s) cannot be empty";
-        }
-      }
-
-      // if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}-\d{3}-\d{4}$/', $phone_number))
+      // for($i=0; $i<count($arr[$i]); $i++)
       // {
-      //   $errMSG = "Your phone number must be exactly 10 digits containing dashes.";
+      //   if(empty($arr[$i])) {
+      //     $errMSG = "Field(s) cannot be empty";
+      //     console.log();
+      //   }
       // }
-      // else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      //   $errMSG = "Please enter a valid email address";
-      // }
 
-      $query = 'SELECT COUNT(username) AS num FROM users WHERE username=:username';
-      $statement = $db->prepare($sql);
-
-      $statement->bindValue(':username', $username);
-
-      $statement->execute();
-
-      $row = $statement->fetch(PDO::FETCH_ASSOC);
-
-      //If the provided username already exists - display error.
-      //TO ADD - Your own method of handling this error. For example purposes,
-      //I'm just going to kill the script completely, as error handling is outside
-      //the scope of this tutorial.
-      if($row['num'] > 0)
+      if(empty($fname))
       {
-        die('That username already exists!');
+        $errMSG = "Please enter your first name.";
+      }
+      else if(empty($lname))
+      {
+        $errMSG = "Please enter your last name.";
+      }
+      else if(empty($address))
+      {
+        $errMSG = "Please enter your address.";
+      }
+      else if(empty($postal))
+      {
+        $errMSG = "Please enter your postal code.";
+      }
+      else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number))
+      {
+        $errMSG = "Your phone number must be exactly 10 digits containing dashes.";
+      }
+      else if(empty($username))
+      {
+        $errMSG = "Please enter your username";
+      }
+      else if(empty($password))
+      {
+        $errMSG = "Please enter your password";
+      }
+      else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errMSG = "Please enter a valid email address";
       }
 
-      //Hash the password as we do NOT want to store our passwords in plain text.
-      $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
-
-      $query = 'INSERT INTO users (username, password) VALUES (:username, :password)';
-      $statement = $db->prepare($sql);
-
-      $statement->bindValue(':username', $username);
-      $statement->bindValue(':password', $passwordHash);
-
-      $row = $statement->execute();
-
-      //If the signup process is successful.
-      if($result)
+      if(!isset($errMSG))
       {
-        //What you do here is up to you!
-        echo 'Thank you for registering with our website.';
+        $query = 'SELECT COUNT(username) AS num FROM users WHERE username=:username';
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':username', $username);
+
+        $statement->execute();
+
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        //If the provided username already exists - display error.
+        //TO ADD - Your own method of handling this error. For example purposes,
+        //I'm just going to kill the script completely, as error handling is outside
+        //the scope of this tutorial.
+        if($row['num'] > 0)
+        {
+          die('That username already exists!');
+        }
+
+        //Hash the password as we do NOT want to store our passwords in plain text.
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
+
+        $query = 'INSERT INTO users (username, password, first_name, last_name, address, phone_number, city, province, postal_code, email_address)
+                  VALUES (:username, :password, :first_name, :last_name, :address, :phone_number, :city, :province, :postal_code, :email_address)';
+        $statement = $db->prepare($query);
+
+        $statement->bindValue(':username', $username);
+        $statement->bindValue(':password', $passwordHash);
+        $statement->bindValue(':first_name', $fname);
+        $statement->bindValue(':last_name', $lname);
+        $statement->bindValue(':address', $address);
+        $statement->bindValue(':phone_number', $phone_number);
+        $statement->bindValue(':city', $city);
+        $statement->bindValue(':province', $_POST['province']);
+        $statement->bindValue(':postal_code', $postal);
+        $statement->bindValue(':email_address', $email);
+
+        if($statement->execute())
+        {
+          $successMSG = "Thank you for registering with Dee's nuts!";
+          echo "<script type='text/javascript'>alert('$successMSG')</script>";
+          header("Location: index.php"); // redirect to main page.
+        }
+        else
+        {
+          $errMSG = "error while inserting....";
+        }
       }
     }
 ?>
@@ -87,16 +127,16 @@
 
     <div class="container">
       <h1 class="display-6">New Customer</h1>
-      <form class="row">
+      <form class="row" method="post">
         <fieldset class="row g-3">
           <legend>Customer information</legend>
           <div class="col-6">
             <label class="form-label">First name</label>
-            <input type="text" class="form-control" name="fname">
+            <input type="text" class="form-control" placeholder="Addie" name="fname">
           </div>
           <div class="col-6">
             <label class="form-label">Last name</label>
-            <input type="text" class="form-control" name="lname">
+            <input type="text" class="form-control" placeholder="Smith" name="lname">
           </div>
           <div class="col-12">
             <label class="form-label">Address</label>
@@ -104,7 +144,7 @@
           </div>
           <div class="col-6">
             <label for="inputZip" class="form-label">Postal code</label>
-            <input type="text" class="form-control" name="postal">
+            <input type="text" class="form-control" placeholder="A1B 2C3" name="postal">
           </div>
           <div class="col-4">
             <label class="form-label">City</label>
@@ -135,7 +175,7 @@
         </fieldset>
         <fieldset class="row g-3">
           <legend>Login information</legend>
-          <div class="col-12">
+          <div class="col-6">
             <label class="form-label">Username</label>
             <input type="text" class="form-control" name="username">
           </div>
@@ -143,10 +183,10 @@
             <label class="form-label">Password</label>
             <input type="password" class="form-control" name="password">
           </div>
-          <div class="col-6">
+          <!-- <div class="col-6">
             <label class="form-label">Re-enter password</label>
             <input type="password" class="form-control" name="retype_password">
-          </div>
+          </div> -->
           <div class="col-12">
             <label class="form-label">Email address</label>
             <input type="text" class="form-control" placeholder="email@domain.com" name="email">

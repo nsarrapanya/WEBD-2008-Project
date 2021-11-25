@@ -34,7 +34,8 @@
 
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if($user === false){
+        if($user === false)
+        {
           die('Incorrect username or password!');
         }
         else
