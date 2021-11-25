@@ -21,7 +21,7 @@
 
       $fields = [$fname, $lname, $address, $postal, $phone_number, $username, $password, $email];
 
-      for($i=0, $i<count($fields), $i++)
+      for($i=0; $i<count($fields); $i++)
       {
         if(empty($fields)) {
           $errMSG = "Field(s) cannot be empty";
