@@ -1,6 +1,4 @@
 <?php
-    error_reporting( ~E_NOTICE ); // avoid notice
-
     require('authenticate.php');
     require('connect.php');
 
@@ -29,13 +27,13 @@
   </head>
   <body>
     <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php include('admin_nav.php')?>
 
     <!-- Container -->
     <div class="container">
-      <div class="row row-cols-3 gy-3">
+      <div class="row row-cols-3">
         <?php while($row=$statement->fetch(PDO::FETCH_ASSOC)):?>
-        <div class="col">
+        <div class="col g-3">
           <img src="images/<?= $row['product_image']?>" class="img-fluid rounded mx-auto d-block" alt="">
           <h2><?= $row['product_name']?></h2>
           <p><?= $row['product_description']?></p>

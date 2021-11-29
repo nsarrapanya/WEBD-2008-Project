@@ -15,7 +15,7 @@
       // extract($reviews_row);
     }
 
-    if(isset($_POST['btnsubmit']))
+    if(isset($_POST['btnSubmit']))
     {
       $review_fname = filter_input(INPUT_POST, 'review_fname', FILTER_SANITIZE_STRING);
       $review_lname = filter_input(INPUT_POST, 'review_lname', FILTER_SANITIZE_STRING);
@@ -55,42 +55,67 @@
 <div class="row">
   <?php if($statement->rowCount() >=1):?>
   <?php while($reviews_row = $statement->fetch(PDO::FETCH_ASSOC)):?>
-  <div class="col gx-3 gy-3">
-    <h1 class="h5"><?= $reviews_row['review_lname'] . ", " . $reviews_row['review_fname']?></h3>
-    <h2 class="h6"><?= date("F d, Y, g:i a", strtotime($reviews_row['review_date']))?></h3>
-    <p><?= $reviews_row['review_comment']?></p>
-  <?php endwhile?>
-  <?php else:?>
-  <div class="col gx-3 gy-3">
-    <h3>There are currently no reviews for this product.</h3>
-  <?php endif?>
-    <form class="form-horizontal" method="post">
-      <div class="row gy-3">
-        <div class="col">
-          <label for="">First name</label>
-          <input type="text" class="form-control" name="review_fname">
-        </div>
-        <div class="col">
-          <label for="">Last Name</label>
-          <input type="text" class="form-control" name="review_lname">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <label for="" class="form-label">Comment</label>
-          <textarea class="form-control" rows="3" name="review_comment"></textarea>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col gy-3">
-          <button type="submit" class="btn btn-primary" name="btnsubmit">Submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-<!-- <div class="row">
-  <div class="col gx-3 gy-3">
+  <div class="row gx-3 gy-3">
 
+    <?php if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])):?>
+
+    <div class="col">
+      <h3><?= $reviews_row['review_lname'] . ", " . $reviews_row['review_fname']?></h3>
+      <p><small><?= date("F d, Y, g:i a", strtotime($reviews_row['review_date']))?></small></p>
+      <p><?= $reviews_row['review_comment']?></p>
+    </div>
+
+    <?php elseif($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5):?>
+
+    <div class="col">
+      <h3><?= $reviews_row['review_lname'] . ", " . $reviews_row['review_fname']?></h3>
+      <p><small><?= date("F d, Y, g:i a", strtotime($reviews_row['review_date']))?> <a class="text-decoration-none col" href="review_delete.php?review_id=<?= $reviews_row['review_id']?>">delete</a></small></p>
+      <p><?= $reviews_row['review_comment']?></p>
+    </div>
+
+    <?php else:?>
+      <div class="col">
+        <h3><?= $reviews_row['review_lname'] . ", " . $reviews_row['review_fname']?></h3>
+        <p><small><?= date("F d, Y, g:i a", strtotime($reviews_row['review_date']))?></small></p>
+        <p><?= $reviews_row['review_comment']?></p>
+      </div>
+
+    <?php endif?>
+  <?php endwhile?>
   </div>
-</div> -->
+
+  <?php else:?>
+
+  <div class="row gx-3 gy-3">
+    <div class="col">
+      <h3>There are no reviews for this product.</h3>
+    </div>
+  </div>
+
+  <?php endif?>
+<!-- Form -->
+<div class="row">
+  <form class="form-horizontal col gx-3 gy-3" method="post">
+    <div class="row gy-3">
+      <div class="col">
+        <label for="">First name</label>
+        <input type="text" class="form-control" name="review_fname">
+      </div>
+      <div class="col">
+        <label for="">Last Name</label>
+        <input type="text" class="form-control" name="review_lname">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="" class="form-label">Comment</label>
+        <textarea class="form-control" rows="3" name="review_comment"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col gy-3">
+        <button type="submit" class="btn btn-primary" name="btnSubmit">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

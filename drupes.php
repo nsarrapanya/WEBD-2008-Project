@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require('connect.php');
 
     $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE products.category_id = 2';
@@ -24,8 +25,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
   </head>
   <body>
-    <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
+        {
+          include('nav.php');
+        }
+        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        {
+          include('admin_nav.php');
+        }
+        else
+        {
+          include('user_nav.php');
+        }
+    ?>
 
     <!-- Container -->
     <div class="container">

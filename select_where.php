@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require('connect.php');
 
     if(isset($_GET['product_id']) && !empty($_GET['product_id']))
@@ -28,12 +29,65 @@
   </head>
   <body>
     <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
+        {
+          include('nav.php');
+        }
+        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        {
+          include('admin_nav.php');
+        }
+        else
+        {
+          include('user_nav.php');
+        }
+    ?>
 
     <!-- Container -->
     <div class="container">
       <div class="row row-cols-2">
-        <?php include('review_container.php')?>
+        
+        <?php if($statement->rowCount() >=1):?>
+
+          <?php while($row=$statement->fetch(PDO::FETCH_ASSOC)):?>
+
+            <?php if(is_null($row['product_image'])): ?>
+
+              <div class="col g-3">
+                <h2><?= $row['product_name']?></h2>
+                <p><?= $row['product_description']?></p>
+                <p>$<?= $row['product_cost']?></p>
+                <p>Category:
+                  <br>
+                  <a href="<?= $row['category_href']?>.php" class="text-decoration-none"><?= $row['category_name']?></a>
+                </p>
+              </div>
+
+            <?php else:?>
+
+              <div class="col g-3">
+                <img src="images/<?= $row['product_image']?>" class="img-fluid rounded mx-auto d-block vw-100" alt="">
+                <h2><?= $row['product_name']?></h2>
+                <p><?= $row['product_description']?></p>
+                <p>$<?= $row['product_cost']?></p>
+                <p>Category:
+                  <br>
+                  <a href="<?= $row['category_href']?>.php" class="text-decoration-none"><?= $row['category_name']?></a>
+                </p>
+              </div>
+            <?php endif?>
+
+          <?php endwhile?>
+
+        <?php else:?>
+
+            <div class="col">
+              <h1 class="display-6">There are no product in-stock. Please check back at a later date!</h1>
+            </div>
+
+        <?php endif?>
+
         <?php include('review.php')?>
       </div>
     </div>

@@ -1,4 +1,5 @@
 <?php
+    session_start();
     require('connect.php');
 
     $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_id';
@@ -14,7 +15,7 @@
     //   }
     // }
 ?>
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -25,7 +26,20 @@
   </head>
   <body>
     <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
+        {
+          include('nav.php');
+        }
+        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        {
+          include('admin_nav.php');
+        }
+        else
+        {
+          include('user_nav.php');
+        }
+    ?>
 
     <!-- Container -->
     <div class="container">

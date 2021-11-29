@@ -1,4 +1,3 @@
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">Dee's Nuts</a>
@@ -8,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="index.php">Home</a>
+          <a class="nav-link" href="index.php">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="botanical.php">Botanical Nuts</a>
@@ -26,7 +25,7 @@
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#adminModal">Admin</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
         </li>
       </ul>
       <form class="d-flex">
@@ -51,46 +50,34 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        What would you like to do? You will be asked for a username and password to make any changes.
+        What would you like to do? You will be asked for an admin credential to make any changes.
       </div>
       <!-- Buttons -->
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" onclick="window.location.href='admin_edit.php'">Edit product</button>
         <button type="button" class="btn btn-primary" onclick="window.location.href='admin_insert.php'">Add products</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href='admin_edit_user.php'">Edit users</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-<!-- Login Modal -->
-<form class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true" action="login.php" method="post">
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <h5 class="modal-title" id="cancelModal">Warning!</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Username</label>
-          <div class="col-sm-10">
-            <input type="text" name="username" class="form-control">
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label class="col-sm-2 col-form-label">Password</label>
-          <div class="col-sm-10">
-            <input type="password" name="password" class="form-control">
-          </div>
-        </div>
-        <div class="row mb-3">
-          <p>Don't have an account? <a href="register.php" class="text-decoration-none">Register</a></p>
-        </div>
+        Are you sure you want to logout?
       </div>
+      <!-- Buttons -->
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" name="btnLogin">Login</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href='logout.php'">Yes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
-</form>
+</div>

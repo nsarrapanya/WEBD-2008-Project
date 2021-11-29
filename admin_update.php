@@ -1,6 +1,4 @@
 <?php
-    error_reporting( ~E_NOTICE ); // avoid notice
-
     require('authenticate.php');
     require('connect.php');
 
@@ -106,11 +104,10 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-    <script src="js/bootstrap.bundle.js"></script>
   </head>
   <body>
     <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php include('admin_nav.php')?>
 
     <!-- Form -->
     <div class="container">
@@ -162,27 +159,12 @@
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <button type="submit" class="btn btn-danger" name="btnDelete" formaction="delete.php?product_id=<?= $row['product_id']?>">Delete</button>
-        <button type="button" class="btn btn-warning" name="btnCancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+        <button type="button" class="btn btn-warning" name="btnCancel" onclick="window.location.href='admin_edit.php'">Cancel</button>
       </form>
     </div>
-    <!-- Cancel Modal -->
-    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="cancelModal">Wanring!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to cancel?
-          </div>
-          <!-- Buttons -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="window.location.href='index.php'">Yes</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Bootstrap scripts -->
+    <script src="js/bootstrap.bundle.js"></script>
+    <!-- Custom scripts -->
+    <!-- <script src="js/scripts.js"></script> -->
   </body>
 </html>

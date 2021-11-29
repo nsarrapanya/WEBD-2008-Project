@@ -2,6 +2,25 @@
     session_start();
     require('connect.php');
 
+    if(isset($_GET['id']) && !empty($_GET['id']))
+    {
+      $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+      $query = 'SELECT * FROM users WHERE id=:id';
+      $statement = $db->prepare($query);
+
+      $statement->bindParam(':id', $id, PDO::PARAM_INT);
+
+      $statement->execute(array(':id'=>$id));
+
+      $row = $statement->fetch(PDO::FETCH_ASSOC);
+      extract($row);
+    }
+    else
+    {
+      header('Location: admin_edit.user.php');
+    }
+
     if(isset($_POST['btnRegister']))
     {
       // customer information fieldset
@@ -34,46 +53,37 @@
       if(empty($fname))
       {
         $errMSG = "Please enter your first name.";
-        echo $errMSG;
       }
       else if(empty($lname))
       {
         $errMSG = "Please enter your last name.";
-        echo $errMSG;
       }
       else if(empty($address))
       {
         $errMSG = "Please enter your address.";
-        echo $errMSG;
       }
       else if(empty($postal))
       {
         $errMSG = "Please enter your postal code.";
-        echo $errMSG;
       }
       else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number))
       {
         $errMSG = "Your phone number must be exactly 10 digits containing dashes.";
-        echo $errMSG;
       }
       else if(empty($username))
       {
         $errMSG = "Please enter your username";
-        echo $errMSG;
       }
       else if(empty($password))
       {
         $errMSG = "Please enter your password";
-        echo $errMSG;
       }
       else if($password != $confirm_password)
       {
         $errMSG = "Your password does not match";
-        echo $errMSG;
       }
       else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errMSG = "Please enter a valid email address";
-        echo $errMSG;
       }
 
       if(!isset($errMSG))
@@ -117,22 +127,22 @@
         if($statement->execute())
         {
           // $successMSG = "Thank you for registering with Dee's nuts!";
-          echo "Thank you for registering with Dee's nuts!";
+          echo "<script type='text/javascript'>alert('Thank you for registering with Dee's nuts!')</script>";
           header("Location: index.php"); // redirect to main page.
         }
         else
         {
-          $errMSG = "Error inserting row...";
-          echo $errMSG;
+          $errMSG = "error while inserting....";
         }
       }
     }
 ?>
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Register</title>
+    <title></title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
@@ -155,34 +165,37 @@
     ?>
 
     <div class="container">
-      <h1>New Customer</h1>
+      <h1>Editing <?= $row['username']?></h1>
       <form class="row" method="post">
         <fieldset class="row g-3">
           <legend>Customer information</legend>
           <div class="col-6">
             <label class="form-label">First name</label>
-            <input type="text" class="form-control" placeholder="Addie" name="fname">
+            <input type="text" class="form-control" placeholder="Addie" name="fname" value=<?= $row['first_name']?>>
           </div>
           <div class="col-6">
             <label class="form-label">Last name</label>
-            <input type="text" class="form-control" placeholder="Smith" name="lname">
+            <input type="text" class="form-control" placeholder="Smith" name="lname" value=<?= $row['last_name']?>>
           </div>
           <div class="col-12">
             <label class="form-label">Address</label>
-            <input type="text" class="form-control" placeholder="1234 Main St" name="address">
+            <input type="text" class="form-control" placeholder="1234 Main St" name="address"
+            value=<?= $row['address']?>>
           </div>
           <div class="col-6">
             <label for="inputZip" class="form-label">Postal code</label>
-            <input type="text" class="form-control" placeholder="A1B 2C3" name="postal">
+            <input type="text" class="form-control" placeholder="A1B 2C3" name="postal"
+            value=<?= $row['postal_code']?>>
           </div>
           <div class="col-4">
             <label class="form-label">City</label>
-            <input type="text" class="form-control" name="city" placeholder="Winnipeg">
+            <input type="text" class="form-control" name="city" placeholder="Winnipeg" value=<?= $row['city']?>>
           </div>
           <div class="col-2">
             <label class="form-label">Province</label>
             <select class="form-select" name="province">
-              <option selected value="Alberta">Alberta</option>
+              <option value=<?= $row['first_name']?> selected><?= $row['first_name']?></option>
+              <option value="Alberta">Alberta</option>
               <option value="British Columbia">British Columbia</option>
               <option value="Manitoba">Manitoba</option>
               <option value="New Brunswick">New Brunswick</option>
@@ -199,30 +212,31 @@
           </div>
           <div class="col-12">
             <labe class="form-label">Phone number</label>
-            <input type="text" class="form-control" placeholder="204-123-4567" name="phone_number">
+            <input type="text" class="form-control" placeholder="204-123-4567" name="phone_number" value=<?= $row['phone_number']?>>
           </div>
         </fieldset>
         <fieldset class="row g-3">
           <legend>Login information</legend>
           <div class="col-12">
             <label class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" placeholder="asmith">
+            <input type="text" class="form-control" name="username" placeholder="asmith" value=<?= $row['username']?>>
           </div>
           <div class="col-6">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" placeholder="********">
+            <input type="password" class="form-control" name="password" placeholder="********" value=<?= $row['password']?>>
           </div>
           <div class="col-6">
             <label class="form-label">Re-enter password</label>
-            <input type="password" class="form-control" name="confirm_password" placeholder="********">
+            <input type="password" class="form-control" name="confirm_password" placeholder="********" value=<?= $row['password']?>>
           </div>
           <div class="col-12">
             <label class="form-label">Email address</label>
-            <input type="text" class="form-control" placeholder="email@domain.com" name="email">
+            <input type="text" class="form-control" placeholder="email@domain.com" name="email" value=<?= $row['email_address']?>>
           </div>
         </fieldset>
-        <div class="col-1 offset-11 gy-3">
+        <div class="col-2 offset-10 gy-3">
           <button type="submit" class="btn btn-primary" name="btnRegister">Submit</button>
+          <button type="button" class="btn btn-warning" name="btnCancel" onclick="window.location.href='admin_edit_user.php'">Cancel</button>
         </div>
       </form>
     </div>
@@ -231,5 +245,6 @@
     <script src="js/bootstrap.bundle.js"></script>
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
+
   </body>
 </html>

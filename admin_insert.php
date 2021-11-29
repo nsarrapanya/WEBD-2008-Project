@@ -1,6 +1,4 @@
 <?php
-    error_reporting( ~E_NOTICE ); // avoid notice
-
     require('authenticate.php');
     require('connect.php');
 
@@ -35,32 +33,35 @@
       }
       else
       {
-        $upload_dir = 'images/'; // upload directory
-
-        $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
-
-        // valid image extensions
-        $valid_extensions = array('jpeg', 'jpg', 'png'); // valid extensions
-
-        // rename uploading image
-        $product_image = rand(1000,1000000).".".$imgExt;
-
-        // allow valid image file formats
-        if(in_array($imgExt, $valid_extensions))
+        if(!empty($imgFile))
         {
-          // Check file size '5MB'
-          if($imgSize < 5000000)
+          $upload_dir = 'images/'; // upload directory
+
+          $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
+
+          // valid image extensions
+          $valid_extensions = array('jpeg', 'jpg', 'png'); // valid extensions
+
+          // rename uploading image
+          $product_image = rand(1000,1000000).".".$imgExt;
+
+          // allow valid image file formats
+          if(in_array($imgExt, $valid_extensions))
           {
-            move_uploaded_file($tmp_dir,$upload_dir.$product_image);
+            // Check file size '5MB'
+            if($imgSize < 5000000)
+            {
+              move_uploaded_file($tmp_dir,$upload_dir.$product_image);
+            }
+            else
+            {
+              $errMSG = "Sorry, your file is too large.";
+            }
           }
           else
           {
-            $errMSG = "Sorry, your file is too large.";
+            $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
           }
-        }
-        else
-        {
-          $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
         }
       }
 
@@ -100,7 +101,7 @@
   </head>
   <body>
     <!-- Navbar -->
-    <?php include('header.php')?>
+    <?php include('admin_nav.php')?>
 
     <!-- Form -->
     <div class="container">
