@@ -2,26 +2,24 @@
     session_start();
     require('connect.php');
 
-    if(isset($_POST['btnLogin']))
-    {
+    if(isset($_POST['btnLogin'])) {
       $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
       $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 
-      if(empty($username))
-      {
-        $errMSG = "Username cannot be empty.";
+      if(empty(trim($username))) {
+        $errMSG = "Please enter you username!";
+        echo $errMSG;
       }
-      else if (empty($password))
-      {
-        $errMSG = "Password cannot be empty.";
+      else if (empty(trim($password))) {
+        $errMSG = "Please enter your password!";
+        echo $errMSG;
       }
-      else if (empty($username) && empty($password))
-      {
+      else if (empty(trim($username)) && empty(trim($password))) {
         $errMSG = "Please enter your username and password!";
+        echo $errMSG;
       }
 
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'SELECT * FROM users WHERE username=:username';
         $statement = $db->prepare($query);
 
@@ -31,29 +29,24 @@
 
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if($user === false)
-        {
+        if($user === false) {
           die('Incorrect username or password!');
         }
-        else
-        {
+        else {
           $validPassword = password_verify($password, $user['password']);
 
-          if($validPassword)
-          {
+          if($validPassword) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['logged_in'] = time();
 
-            if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
-            {
+            if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5) {
               $_SESSION['user_id'] = $user['id'];
               $_SESSION['logged_in'] = time();
 
               header("Location: index.php");
               exit();
             }
-            else
-            {
+            else {
               $_SESSION['user_id'] = $user['id'];
               $_SESSION['logged_in'] = time();
 
@@ -61,8 +54,7 @@
               exit();
             }
           }
-          else
-          {
+          else {
             die('Incorrect username or password!');
           }
         }
@@ -82,6 +74,7 @@
     <link href="css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
+    
   <main class="form-signin">
     <form method="post">
       <!-- <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->

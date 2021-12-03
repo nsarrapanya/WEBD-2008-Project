@@ -2,8 +2,7 @@
     session_start();
     require('connect.php');
 
-    if(isset($_GET['product_id']) && !empty($_GET['product_id']))
-    {
+    if(isset($_GET['product_id']) && !empty($_GET['product_id'])) {
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE product_id=:product_id';
@@ -18,24 +17,23 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Dee's Nuts</title>
+    <title>Dee's Nuts - <?= $row['product_name']?></title>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
   </head>
   <body>
+
     <!-- Navbar -->
     <?php
-        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
-        {
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])) {
           include('nav.php');
         }
-        else if($_SESSION['user_id'] == 1)
-        {
+        else if($_SESSION['user_id'] == 1) {
           include('admin_nav.php');
         }
-        else
-        {
+        else {
           include('user_nav.php');
         }
     ?>

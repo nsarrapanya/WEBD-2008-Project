@@ -1,9 +1,9 @@
 <?php
     session_start();
+    require('authenticate.php');
     require('connect.php');
 
-    if(isset($_GET['id']) && !empty($_GET['id']))
-    {
+    if(isset($_GET['id']) && !empty($_GET['id'])) {
       $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM users WHERE id=:id';
@@ -16,13 +16,11 @@
       $row = $statement->fetch(PDO::FETCH_ASSOC);
       extract($row);
     }
-    else
-    {
-      header('Location: admin_edit.user.php');
+    else {
+      header('Location: admin_edit_user.php');
     }
 
-    if(isset($_POST['btnRegister']))
-    {
+    if(isset($_POST['btnRegister'])) {
       // customer information fieldset
       $fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
       $lname = filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
@@ -40,54 +38,35 @@
       $confirm_password = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
       $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
-      // $arr = [$fname, $lname, $address, $postal, $phone_number, $username, $password, $email];
-
-      // for($i=0; $i<count($arr[$i]); $i++)
-      // {
-      //   if(empty($arr[$i])) {
-      //     $errMSG = "Field(s) cannot be empty";
-      //     console.log();
-      //   }
-      // }
-
-      if(empty($fname))
-      {
+      if(empty($fname)) {
         $errMSG = "Please enter your first name.";
       }
-      else if(empty($lname))
-      {
+      else if(empty($lname)) {
         $errMSG = "Please enter your last name.";
       }
-      else if(empty($address))
-      {
+      else if(empty($address)) {
         $errMSG = "Please enter your address.";
       }
-      else if(empty($postal))
-      {
+      else if(empty($postal)) {
         $errMSG = "Please enter your postal code.";
       }
-      else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number))
-      {
+      else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number)) {
         $errMSG = "Your phone number must be exactly 10 digits containing dashes.";
       }
-      else if(empty($username))
-      {
+      else if(empty($username)) {
         $errMSG = "Please enter your username";
       }
-      else if(empty($password))
-      {
+      else if(empty($password)) {
         $errMSG = "Please enter your password";
       }
-      else if($password != $confirm_password)
-      {
+      else if($password != $confirm_password) {
         $errMSG = "Your password does not match";
       }
       else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errMSG = "Please enter a valid email address";
       }
 
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'SELECT COUNT(username) AS num FROM users WHERE username=:username';
         $statement = $db->prepare($query);
 
@@ -97,12 +76,7 @@
 
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        //If the provided username already exists - display error.
-        //TO ADD - Your own method of handling this error. For example purposes,
-        //I'm just going to kill the script completely, as error handling is outside
-        //the scope of this tutorial.
-        if($row['num'] > 0)
-        {
+        if($row['num'] > 0) {
           die('That username already exists!');
         }
 
@@ -124,15 +98,13 @@
         $statement->bindValue(':postal_code', $postal);
         $statement->bindValue(':email_address', $email);
 
-        if($statement->execute())
-        {
-          // $successMSG = "Thank you for registering with Dee's nuts!";
-          echo "<script type='text/javascript'>alert('Thank you for registering with Dee's nuts!')</script>";
+        if($statement->execute()) {
+          $successMSG = "Thank you for registering with Dee's nuts!";
           header("Location: index.php"); // redirect to main page.
         }
-        else
-        {
+        else {
           $errMSG = "error while inserting....";
+          echo $errMSG;
         }
       }
     }
@@ -142,7 +114,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Dee's Nuts - User edit</title>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
@@ -150,16 +123,13 @@
   <body>
     <!-- Navbar -->
     <?php
-        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
-        {
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])) {
           include('nav.php');
         }
-        else if($_SESSION['user_id'] == 1)
-        {
+        else if($_SESSION['user_id'] == 1) {
           include('admin_nav.php');
         }
-        else
-        {
+        else {
           include('user_nav.php');
         }
     ?>
@@ -243,8 +213,8 @@
 
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
+
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
-
   </body>
 </html>

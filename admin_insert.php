@@ -1,9 +1,9 @@
 <?php
+    session_start();
     require('authenticate.php');
     require('connect.php');
 
-    if(isset($_POST['btnSubmit']))
-    {
+    if(isset($_POST['btnSubmit'])) {
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
       $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
       $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
@@ -13,22 +13,19 @@
       $tmp_dir = $_FILES['product_image']['tmp_name'];
       $imgSize = $_FILES['product_image']['size'];
 
-      if(empty($product_name))
-      {
+      if(empty(trim($product_name))) {
         $errMSG = "Please enter the product name.";
+        echo $errMSG;
       }
-      else if(empty($product_description))
-      {
+      else if(empty(trim($product_description))) {
         $errMSG = "Please enter the product description.";
+        echo $errMSG;
       }
-      else if(empty($product_cost))
-      {
+      else if(empty(trim($product_cost))) {
         $errMSG = "Please enter the product cost.";
       }
-      else
-      {
-        if(!empty($imgFile))
-        {
+      else {
+        if(!empty($imgFile)) {
           $upload_dir = 'images/'; // upload directory
 
           $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
@@ -40,20 +37,16 @@
           $product_image = rand(1000,1000000).".".$imgExt;
 
           // allow valid image file formats
-          if(in_array($imgExt, $valid_extensions))
-          {
+          if(in_array($imgExt, $valid_extensions)) {
             // Check file size '5MB'
-            if($imgSize < 5000000)
-            {
+            if($imgSize < 5000000) {
               move_uploaded_file($tmp_dir,$upload_dir.$product_image);
             }
-            else
-            {
+            else {
               $errMSG = "Sorry, your file is too large.";
             }
           }
-          else
-          {
+          else {
             $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
           }
         }
@@ -61,8 +54,7 @@
 
 
       // if no error occured, continue ....
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'INSERT INTO products (product_name, product_description, product_cost, product_image, category_id) VALUES (:product_name, :product_description, :product_cost, :product_image, :category_id)';
 
         $statement = $db->prepare($query);
@@ -72,14 +64,12 @@
         $statement->bindParam(':product_image', $product_image);
         $statement->bindParam(':category_id', $category_id);
 
-        if($statement->execute())
-        {
-          $successMSG = "new record succesfully inserted ...";
+        if($statement->execute()) {
           header("Location: index.php"); // redirect to main page.
         }
-        else
-        {
-          $errMSG = "error while inserting....";
+        else {
+          $errMSG = "Error while inserting....";
+          echo $errMSG;
         }
       }
     }
@@ -89,11 +79,13 @@
   <head>
     <meta charset="utf-8">
     <title>Dee's Nuts - Admin insert</title>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
   </head>
   <body>
+
     <!-- Navbar -->
     <?php include('admin_nav.php')?>
 
@@ -154,32 +146,13 @@
           </div>
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
-        <button type="button" class="btn btn-warning" name="btnCancel" data-bs-toggle="modal" data-bs-target="#cancelModal">Cancel</button>
+        <a class="btn btn-warning" href="index.php">Cancel</a>
       </form>
-    </div>
-    <!-- Cancel Modal -->
-    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="cancelModal">Warning!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            Are you sure you want to cancel?
-          </div>
-          <!-- Buttons -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="window.location.href='index.php'">Yes</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
-    
+
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
   </body>

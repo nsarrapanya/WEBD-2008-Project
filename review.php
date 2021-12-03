@@ -1,6 +1,5 @@
 <?php
-    if(isset($_GET['product_id']) && !empty($_GET['product_id']))
-    {
+    if(isset($_GET['product_id']) && !empty($_GET['product_id'])) {
       // $id = $_GET['product_id'];
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -15,28 +14,23 @@
       // extract($reviews_row);
     }
 
-    if(isset($_POST['btnSubmit']))
-    {
+    if(isset($_POST['btnSubmit'])) {
       $review_fname = filter_input(INPUT_POST, 'review_fname', FILTER_SANITIZE_STRING);
       $review_lname = filter_input(INPUT_POST, 'review_lname', FILTER_SANITIZE_STRING);
       $review_comment = filter_input(INPUT_POST, 'review_comment', FILTER_SANITIZE_STRING);
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
-      if(empty($review_fname))
-      {
+      if(empty($review_fname)) {
         $errMSG = "You must provide your first name";
       }
-      else if(empty($review_lname))
-      {
+      else if(empty($review_lname)) {
         $errMSG = "You must provide your last name";
       }
-      else if(empty($review_comment))
-      {
+      else if(empty($review_comment)) {
         $errMSG = "You must enter a comment";
       }
 
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'INSERT INTO reviews (review_fname, review_lname, review_comment, product_id) VALUES (:review_fname, :review_lname, :review_comment, :product_id)';
 
         $statement = $db->prepare($query);
@@ -45,8 +39,7 @@
         $statement->bindParam(':review_comment', $review_comment);
         $statement->bindParam(':product_id', $_GET['product_id']);
 
-        if($statement->execute())
-        {
+        if($statement->execute()) {
           header("Location: index.php");
         }
       }

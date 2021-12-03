@@ -1,9 +1,9 @@
 <?php
+    session_start();
     require('authenticate.php');
     require('connect.php');
 
-    if(isset($_GET['product_id']) && !empty($_GET['product_id']))
-    {
+    if(isset($_GET['product_id']) && !empty($_GET['product_id'])) {
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM products WHERE product_id=:product_id';
@@ -16,13 +16,11 @@
       $row = $statement->fetch(PDO::FETCH_ASSOC);
       extract($row);
     }
-    else
-    {
+    else {
       header("Location: index.php");
     }
 
-    if (isset($_POST['btnSubmit']))
-    {
+    if (isset($_POST['btnSubmit'])) {
 
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
       $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
@@ -33,8 +31,7 @@
       $tmp_dir = $_FILES['product_image']['tmp_name'];
       $imgSize = $_FILES['product_image']['size'];
 
-      if($imgFile)
-      {
+      if($imgFile) {
         $upload_dir = 'images/'; // upload directory
 
         $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
@@ -42,20 +39,16 @@
         $valid_extensions = array('jpeg', 'jpg', 'png'); // valid extensions
 
         $product_image = rand(1000,1000000).".".$imgExt;
-        if(in_array($imgExt, $valid_extensions))
-        {
-          if($imgSize < 5000000)
-          {
+        if(in_array($imgExt, $valid_extensions)) {
+          if($imgSize < 5000000) {
             unlink($upload_dir.$row['product_image']);
             move_uploaded_file($tmp_dir,$upload_dir.$product_image);
           }
-          else
-          {
+          else {
             $errMSG = "Sorry, your file is too large it should be less then 5MB";
           }
         }
-        else
-        {
+        else {
           $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
         }
       }
@@ -63,15 +56,13 @@
         $product_image = NULL;
         unlink("images/".$row['product_image']);
       }
-      else
-      {
+      else {
         // if no image selected the old image remain as it is.
         $product_image = $row['product_image']; // old image from database
       }
 
       // if no error occured, continue ....
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'UPDATE products SET product_name=:product_name, product_description=:product_description, product_cost=:product_cost, product_image=:product_image, category_id=:category_id WHERE product_id=:product_id';
 
         $statement = $db->prepare($query);
@@ -82,13 +73,12 @@
         $statement->bindParam(':category_id', $category_id);
         $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
-        if($statement->execute())
-        {
+        if($statement->execute()) {
           header("Location: admin_edit.php");
         }
-        else
-        {
-          $errMSG = "Sorry Data Could Not Updated !";
+        else {
+          $errMSG = "Error while updating...";
+          echo $errMSG;
         }
       }
     }
@@ -97,21 +87,23 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Dee's Nuts - Admin insert</title>
+    <title>Dee's Nuts - Admin update</title>
+
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
   </head>
   <body>
+
     <!-- Navbar -->
     <?php include('admin_nav.php')?>
 
     <!-- Form -->
     <div class="container">
       <form method="post" enctype="multipart/form-data" class="form-horizontal">
-        <input type="hidden" name="product_id" value="<?= $row['product_id']?>">
-
+        <!-- <input type="hidden" name="product_id" value="<?= $row['product_id']?>"> -->
         <h1 class="display-6">Edit <?= $row['product_name']?></h1>
+
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
@@ -120,6 +112,7 @@
             Please enter a product name.
           </div>
         </div>
+
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
@@ -128,6 +121,7 @@
             Please enter a product description.
           </div>
         </div>
+
         <!-- Category id -->
         <div class="input-group mb-3">
           <label class="input-group-text">Category</label>
@@ -149,7 +143,6 @@
           </select>
         </div>
         <!-- Product cost -->
-        <!-- <label class="form-label">Product cost</label> -->
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
           <input type="text" class="form-control" name="product_cost" value="<?= $row['product_cost']?>">
@@ -164,17 +157,26 @@
             Please provide a product image.
           </div>
         </div>
+
+        <?php if(is_null($row['product_image']) && empty($row['product_image'])): ?>
+
+        <?php else:?>
+        <!-- Delete image checkbox -->
         <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" name="chkDel">
           <label class="form-check-label">Remove image</label>
         </div>
+        <?php endif?>
+
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <button type="submit" class="btn btn-danger" name="btnDelete" formaction="delete.php?product_id=<?= $row['product_id']?>">Delete</button>
-        <button type="button" class="btn btn-warning" name="btnCancel" onclick="window.location.href='admin_edit.php'">Cancel</button>
+        <a class="btn btn-warning" href="admin_edit.php">Cancel</a>
       </form>
     </div>
+
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
+
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
   </body>

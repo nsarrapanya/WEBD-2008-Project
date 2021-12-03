@@ -51,7 +51,9 @@
     </div>
   </div>
 </nav>
+
 <!-- Admin Modal -->
+
 <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -72,7 +74,9 @@
     </div>
   </div>
 </div>
+
 <!-- Product Modal -->
+
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -86,13 +90,15 @@
       <!-- Buttons -->
       <div class="modal-footer">
         <a class="btn btn-primary" href="admin_edit.php">Edit</a>
-        <a class="btn btn-primary" href="admin_edit_insert.php">Add</a>
+        <a class="btn btn-primary" href="admin_insert.php">Add</a>
         <button type="button" class="btn btn-secondary" data-bs-target="#adminModal" data-bs-toggle="modal">Back</button>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Categories Modal -->
+
 <div class="modal fade" id="categoriesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -105,14 +111,16 @@
       </div>
       <!-- Buttons -->
       <div class="modal-footer">
-        <a class="btn btn-primary" href="admin_edit_categories.php">Edit</a>
+        <a class="btn btn-primary" href="admin_categories.php">Edit</a>
         <a class="btn btn-primary" href="admin_insert_categories.php">Add</a>
         <button type="button" class="btn btn-secondary" data-bs-target="#adminModal" data-bs-toggle="modal">Back</button>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Logout Modal -->
+
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

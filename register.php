@@ -2,8 +2,7 @@
     session_start();
     require('connect.php');
 
-    if(isset($_POST['btnRegister']))
-    {
+    if(isset($_POST['btnRegister'])) {
       // customer information fieldset
       $fname = filter_input(INPUT_POST, 'fname', FILTER_SANITIZE_STRING);
       $lname = filter_input(INPUT_POST, 'lname', FILTER_SANITIZE_STRING);
@@ -12,7 +11,6 @@
           "options" => array(
             "regexp" => '/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i')
           ));
-      // $province = filter_input(INPUT_POST, 'province', FILTER_SANITIZE_STRING);
       $phone_number = filter_input(INPUT_POST, 'phone_number', FILTER_SANITIZE_NUMBER_INT);
       $city = filter_input(INPUT_POST, 'city', FILTER_SANITIZE_STRING);
       // login information fieldset
@@ -21,53 +19,35 @@
       $confirm_password = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
       $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
-      // $arr = [$fname, $lname, $address, $postal, $phone_number, $username, $password, $email];
-
-      // for($i=0; $i<count($arr[$i]); $i++)
-      // {
-      //   if(empty($arr[$i])) {
-      //     $errMSG = "Field(s) cannot be empty";
-      //     console.log();
-      //   }
-      // }
-
-      if(empty($fname))
-      {
+      if(empty(trim($fname))) {
         $errMSG = "Please enter your first name.";
         echo $errMSG;
       }
-      else if(empty($lname))
-      {
+      else if(empty(trim($lname))) {
         $errMSG = "Please enter your last name.";
         echo $errMSG;
       }
-      else if(empty($address))
-      {
+      else if(empty(trim($address))) {
         $errMSG = "Please enter your address.";
         echo $errMSG;
       }
-      else if(empty($postal))
-      {
+      else if(empty(trim($postal))) {
         $errMSG = "Please enter your postal code.";
         echo $errMSG;
       }
-      else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number))
-      {
+      else if(strlen($phone_number) !== 12 || !preg_match('/^\d{3}(-)?\d{3}(-)?\d{4}$/', $phone_number)) {
         $errMSG = "Your phone number must be exactly 10 digits containing dashes.";
         echo $errMSG;
       }
-      else if(empty($username))
-      {
+      else if(empty(trim($username))) {
         $errMSG = "Please enter your username";
         echo $errMSG;
       }
-      else if(empty($password))
-      {
+      else if(empty(trim($password))) {
         $errMSG = "Please enter your password";
         echo $errMSG;
       }
-      else if($password != $confirm_password)
-      {
+      else if($password != $confirm_password) {
         $errMSG = "Your password does not match";
         echo $errMSG;
       }
@@ -76,8 +56,7 @@
         echo $errMSG;
       }
 
-      if(!isset($errMSG))
-      {
+      if(!isset($errMSG)) {
         $query = 'SELECT COUNT(username) AS num FROM users WHERE username=:username';
         $statement = $db->prepare($query);
 
@@ -87,16 +66,12 @@
 
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        //If the provided username already exists - display error.
-        //TO ADD - Your own method of handling this error. For example purposes,
-        //I'm just going to kill the script completely, as error handling is outside
-        //the scope of this tutorial.
-        if($row['num'] > 0)
-        {
+        // Checking if username already exist or not.
+        if($row['num'] > 0) {
           die('That username already exists!');
         }
 
-        //Hash the password as we do NOT want to store our passwords in plain text.
+        // Hash the password as we do NOT want to store our passwords in plain text.
         $passwordHash = password_hash($password, PASSWORD_BCRYPT, array("cost" => 12));
 
         $query = 'INSERT INTO users (username, password, first_name, last_name, address, phone_number, city, province, postal_code, email_address)
@@ -114,14 +89,12 @@
         $statement->bindValue(':postal_code', $postal);
         $statement->bindValue(':email_address', $email);
 
-        if($statement->execute())
-        {
+        if($statement->execute()) {
           // $successMSG = "Thank you for registering with Dee's nuts!";
           echo "Thank you for registering with Dee's nuts!";
           header("Location: index.php"); // redirect to main page.
         }
-        else
-        {
+        else {
           $errMSG = "Error inserting row...";
           echo $errMSG;
         }

@@ -1,8 +1,7 @@
 <?php
     require('connect.php');
 
-    if(isset($_GET['product_id']))
-    {
+    if(isset($_GET['product_id'])) {
       // select image from db to delete
       $query = 'SELECT product_image FROM products WHERE product_id=:product_id';
 
@@ -17,8 +16,7 @@
       $statement = $db->prepare($query);
       $statement->bindParam(':product_id',$_GET['product_id']);
 
-      if($statement->execute())
-      {
+      if($statement->execute()) {
 
       header("Location: index.php");
       exit();

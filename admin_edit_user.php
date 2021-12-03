@@ -12,27 +12,16 @@
 <html lang="en" dir="ltr">
  <head>
    <meta charset="utf-8">
-   <title>Dee's Nuts</title>
+   <title>Dee's Nuts - Edit users</title>
+
    <!-- Bootstrap -->
    <link rel="stylesheet" href="css/bootstrap.css">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
  </head>
  <body>
+
    <!-- Navbar -->
-   <?php
-       if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
-       {
-         include('nav.php');
-       }
-       else if($_SESSION['user_id'] == 1)
-       {
-         include('admin_nav.php');
-       }
-       else
-       {
-         include('user_nav.php');
-       }
-   ?>
+   <?php include('admin_nav.php')?>
 
    <!-- Container -->
    <div class="container">
@@ -40,7 +29,7 @@
 
        <div class="col offset-md-10 g-3">
          <br>
-         <a href="register.php" class="link-decoration-none">Add new user</a>
+         <a href="register.php" class="btn btn-success">Add new user</a>
        </div>
      </div>
 
@@ -105,7 +94,7 @@
          </div>
          <!-- Buttons -->
          <div class="modal-footer">
-           <button type="button" class="btn btn-primary" onclick="window.location.href='index.php'">Yes</button>
+           <a class="btn btn-primary" href="index.php">Yes</a>
            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
          </div>
        </div>
@@ -114,6 +103,7 @@
 
    <!-- Bootstrap scripts -->
    <script src="js/bootstrap.bundle.js"></script>
+
    <!-- Custom scripts -->
    <!-- <script src="js/scripts.js"></script> -->
  </body>

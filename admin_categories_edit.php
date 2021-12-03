@@ -3,6 +3,23 @@
     require('authenticate.php');
     require('connect.php');
 
+    if(isset($_GET['category_id']) && !empty($_GET['category_id'])) {
+      $category_id = filter_input(INPUT_GET, 'category_id', FILTER_SANITIZE_NUMBER_INT);
+
+      $query = 'SELECT * FROM categories WHERE category_id=:category_id';
+      $statement = $db->prepare($query);
+
+      $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+
+      $statement->execute(array(':category_id'=>$category_id));
+
+      $row = $statement->fetch(PDO::FETCH_ASSOC);
+      extract($row);
+    }
+    else {
+      header('Location: admin_categories.php');
+    }
+
     if(isset($_POST['btnSubmit'])) {
       $category_name = filter_input(INPUT_POST, 'category_name', FILTER_SANITIZE_STRING);
       $category_description = filter_input(INPUT_POST, 'category_description', FILTER_SANITIZE_STRING);
@@ -61,18 +78,18 @@
         <h1 class="display-6">Add a new category</h1>
         <div class="mb-3">
           <label>Category name</label>
-          <input type="text" class="form-control" name="category_name" placeholder="Botanical">
+          <input type="text" class="form-control" name="category_name" placeholder="Botanical" value="<?= $row['category_name']?>">
         </div>
         <div class="mb-3">
           <label>Category description</label>
-          <input type="text" class="form-control" name="category_description" placeholder="Dry, hard-shelled, compartmentalized fruit that do not split on maturity to release seeds.">
+          <input type="text" class="form-control" name="category_description" placeholder="Dry, hard-shelled, compartmentalized fruit that do not split on maturity to release seeds." value="<?= $row['category_description']?>">
         </div>
         <div class="mb-3">
           <label>Category href</label>
-          <input type="text" class="form-control" name="category_href" placeholder="botanical">
+          <input type="text" class="form-control" name="category_href" placeholder="botanical" value="<?= $row['category_href']?>">
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
-        <a class="btn btn-warning" href="index.php">Cancel</a>
+        <a class="btn btn-warning" href="admin_categories.php">Cancel</a>
       </form>
     </div>
 
