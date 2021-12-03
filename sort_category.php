@@ -5,22 +5,51 @@
     if(isset($_GET['category_id']) && !empty($_GET['category_id'])) {
       $category_id = filter_input(INPUT_GET, 'category_id', FILTER_SANITIZE_NUMBER_INT);
 
-      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id';
-      $statement = $db->prepare($query);
+      if(isset($_POST['radPriceASC'])) {
+        $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id ORDER BY product_cost ASC';
 
-      $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+        $statement = $db->prepare($query);
 
-      $statement->execute(array(':category_id'=>$category_id));
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+
+        $statement->execute(array(':category_id'=>$category_id));
+
+        echo "Currently sorting: product_cost ASC";
+      }
+      else if(isset($_POST['radPriceDESC'])) {
+        $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id ORDER BY product_cost DESC';
+
+        $statement = $db->prepare($query);
+
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+
+        $statement->execute(array(':category_id'=>$category_id));
+
+        echo "Currently sorting: product_cost DESC";
+      }
+      else if(isset($_POST['radProductASC'])) {
+        $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id ORDER BY product_name ASC';
+
+        $statement = $db->prepare($query);
+
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+
+        $statement->execute(array(':category_id'=>$category_id));
+
+        echo "Currently sorting: product_name ASC";
+      }
+      else if(isset($_POST['radProductDESC'])) {
+        $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id ORDER BY product_name DESC';
+
+        $statement = $db->prepare($query);
+
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+
+        $statement->execute(array(':category_id'=>$category_id));
+
+        echo "Currently sorting: product_name DESC";
+      }
     }
-
-    else {
-      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id';
-
-      $statement = $db->prepare($query);
-
-      $statement->execute();
-    }
-
  ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

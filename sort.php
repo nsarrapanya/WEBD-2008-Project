@@ -2,25 +2,44 @@
     session_start();
     require('connect.php');
 
-    if(isset($_GET['category_id']) && !empty($_GET['category_id'])) {
-      $category_id = filter_input(INPUT_GET, 'category_id', FILTER_SANITIZE_NUMBER_INT);
+    if(isset($_POST['radPriceASC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_cost ASC';
 
-      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id =:category_id';
       $statement = $db->prepare($query);
+      $statement->execute();
 
-      $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-
-      $statement->execute(array(':category_id'=>$category_id));
+      echo "Currently sorting: product_cost ASC";
     }
-
-    else {
-      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE categories.category_id';
+    else if(isset($_POST['radPriceDESC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_cost DESC';
 
       $statement = $db->prepare($query);
+      $statement->execute();
 
+      echo "Currently sorting: product_cost DESC";
+    }
+    else if(isset($_POST['radProductASC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_name ASC';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_name ASC";
+    }
+    else if(isset($_POST['radProductDESC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_name DESC';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_name DESC";
+    }
+    else {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id';
+
+      $statement = $db->prepare($query);
       $statement->execute();
     }
-
  ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -52,7 +71,7 @@
       <form class="row" action="sort.php" method="post">
         <div class="col gy-3">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="radPriceASC">
+            <input class="form-check-input" type="radio" name="radPriceASC"
             <label class="form-check-label">Price Ascending</label>
           </div>
         </div>
@@ -75,17 +94,7 @@
           </div>
         </div>
         <div class="col-1 offset-2 gy-3">
-
-          <?php if(isset($_GET['category_id']) && !empty($_GET['category_id'])):?>
-
-          <button class="btn btn-primary" formaction="sort_category.php?category_id=<?= $_GET['category_id']?>">Sort</button>
-
-          <?php else:?>
-
           <button class="btn btn-primary" formaction="sort.php">Sort</button>
-
-          <?php endif?>
-
         </div>
       </form>
       <div class="row row-cols-3">

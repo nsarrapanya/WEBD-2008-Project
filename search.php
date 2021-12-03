@@ -2,16 +2,21 @@
     session_start();
     require('connect.php');
 
-    $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE products.category_id = 4';
+    if(isset($_POST['bxQuery'])) {
+      $bxQuery = filter_input(INPUT_POST, 'bxQuery', FILTER_SANITIZE_STRING);
 
-    $statement = $db->prepare($query);
-    $statement->execute();
+      $query = "SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE (product_name LIKE '%" . $bxQuery . "%') OR (category_name LIKE '%" . $bxQuery . "%')";
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+    }
 ?>
- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Angiosperm nuts</title>
+    <title>Dee's Nuts - Search Results</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -32,7 +37,6 @@
         }
     ?>
 
-    <!-- Container -->
     <div class="container">
       <div class="row row-cols-3">
         <?php include('container.php')?>
@@ -41,8 +45,9 @@
 
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
-    
+
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
+  </body>
   </body>
 </html>

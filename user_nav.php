@@ -19,26 +19,20 @@
 
         <?php while($nav_row=$navbar_statement->fetch(PDO::FETCH_ASSOC)):?>
 
-          <?php if(is_null($nav_row['category_href']) && empty($nav_row['category_href'])):?>
-
-          <?php else:?>
-
           <li>
-            <a class="nav-link" href="<?= $nav_row['category_href']?>.php"><?= $nav_row['category_name']?></a>
+            <a class="nav-link" href="index.php?category_id=<?= $nav_row['category_id']?>"><?= $nav_row['category_name']?></a>
           </li>
 
-          <?php endif?>
-
-        <?php endwhile?>
+        <?php endwhile?>>
 
         <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Almonds..." aria-label="Search" list="exampleOptions" id="exampleDataList">
-        <button class="btn btn-outline-light" type="submit">Search</button>
-        <datalist id="exampleOptions">
+      <form class="d-flex" method="post" action="search.php">
+        <input class="form-control me-2" type="search" name="bxQuery" placeholder="Almonds..." list="Options">
+        <button class="btn btn-outline-light" type="submit" name="btnSearch">Search</button>
+        <datalist id="Options">
           <option value="Almonds"></option>
           <option value="Brazil nuts"></option>
           <option value="Cashews"></option>
