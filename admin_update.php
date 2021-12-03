@@ -4,7 +4,6 @@
 
     if(isset($_GET['product_id']) && !empty($_GET['product_id']))
     {
-      // $id = $_GET['product_id'];
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM products WHERE product_id=:product_id';
@@ -23,13 +22,7 @@
     }
 
     if (isset($_POST['btnSubmit']))
-    // if ($_POST && !empty($_POST['product_id']) && !empty($_POST['product_name']) && !empty($_POST['product_description']) && !empty($_POST['category_id']) && !empty($_POST['product_name']))
     {
-      // $product_name = $_POST['product_name'];  // Product name
-      // $product_description = $_POST['product_description'];  // Product description
-      // $category_id = $_POST['category_id'];  // Category id
-      // $product_cost = $_POST['product_cost'];  // Product cost
-      // $product_image = $_POST['product_image'];  // Product image
 
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
       $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
@@ -60,11 +53,15 @@
           {
             $errMSG = "Sorry, your file is too large it should be less then 5MB";
           }
-       }
-       else
-       {
-         $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
-       }
+        }
+        else
+        {
+          $errMSG = "Sorry, only JPG, JPEG & PNG files are allowed.";
+        }
+      }
+      else if(isset($_POST['chkDel'])) {
+        $product_image = NULL;
+        unlink("images/".$row['product_image']);
       }
       else
       {
@@ -135,10 +132,20 @@
         <div class="input-group mb-3">
           <label class="input-group-text">Category</label>
           <select class="form-select" name="category_id">
-            <option value="1">Botanical nuts</option>
-            <option value="2">Drupes</option>
-            <option value="3">Gymnosperm seeds</option>
-            <option value="4">Angiosperm seeds</option>
+
+            <?php
+                $navbar = 'SELECT * FROM categories';
+
+                $navbar_statement = $db->prepare($navbar);
+                $navbar_statement->execute();
+            ?>
+
+            <?php while($nav_row=$navbar_statement->fetch(PDO::FETCH_ASSOC)):?>
+
+              <option value="<?= $nav_row['category_id']?>"><?= $nav_row['category_name']?></option>
+
+            <?php endwhile?>
+
           </select>
         </div>
         <!-- Product cost -->
@@ -156,6 +163,10 @@
           <div id="productImageValidation" class="invalid-feedback">
             Please provide a product image.
           </div>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="chkDel">
+          <label class="form-check-label">Remove image</label>
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <button type="submit" class="btn btn-danger" name="btnDelete" formaction="delete.php?product_id=<?= $row['product_id']?>">Delete</button>

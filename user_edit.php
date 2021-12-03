@@ -154,7 +154,7 @@
         {
           include('nav.php');
         }
-        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        else if($_SESSION['user_id'] == 1)
         {
           include('admin_nav.php');
         }

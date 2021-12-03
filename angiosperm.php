@@ -20,17 +20,19 @@
   <head>
     <meta charset="utf-8">
     <title>Angiosperm nuts</title>
+    
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
   </head>
   <body>
+    <!-- Navbar -->
     <?php
         if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in']))
         {
           include('nav.php');
         }
-        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        else if($_SESSION['user_id'] == 1)
         {
           include('admin_nav.php');
         }

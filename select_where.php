@@ -4,7 +4,6 @@
 
     if(isset($_GET['product_id']) && !empty($_GET['product_id']))
     {
-      // $id = $_GET['product_id'];
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
 
       $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id WHERE product_id=:product_id';
@@ -13,9 +12,6 @@
       $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
       $statement->execute(array(':product_id'=>$product_id));
-
-      // $row = $statement->fetch(PDO::FETCH_ASSOC);
-      // extract($row);
     }
 ?>
  <!DOCTYPE html>
@@ -34,7 +30,7 @@
         {
           include('nav.php');
         }
-        else if($_SESSION['user_id'] == 1 || $_SESSION['user_id'] == 5)
+        else if($_SESSION['user_id'] == 1)
         {
           include('admin_nav.php');
         }
@@ -47,7 +43,7 @@
     <!-- Container -->
     <div class="container">
       <div class="row row-cols-2">
-        
+
         <?php if($statement->rowCount() >=1):?>
 
           <?php while($row=$statement->fetch(PDO::FETCH_ASSOC)):?>

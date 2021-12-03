@@ -19,10 +19,6 @@
       {
         $errMSG = "Please enter your username and password!";
       }
-      // else
-      // {
-      //   header("Location: index.php");
-      // }
 
       if(!isset($errMSG))
       {
@@ -78,8 +74,10 @@
   <head>
     <meta charset="utf-8">
     <title>Sign in</title>
+
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="css/signin.css" rel="stylesheet">
   </head>

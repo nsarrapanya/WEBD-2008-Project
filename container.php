@@ -2,7 +2,7 @@
 <?php while($row=$statement->fetch(PDO::FETCH_ASSOC)):?>
 <div class="col g-3">
 
-  <?php if(is_null($row['product_image'])): ?>
+  <?php if(is_null($row['product_image']) && empty($row['product_image'])): ?>
 
     <h2><?= $row['product_name']?></h2>
     <p><?= $row['product_description']?> <a href="select_where.php?product_id=<?= $row['product_id']?>" class="text-decoration-none"> More... </a></p>
@@ -43,7 +43,8 @@
 
   <?php endif?>
 
-</div>
+  </div>
+
 <?php endwhile?>
 
 <?php else:?>

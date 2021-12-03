@@ -1,3 +1,10 @@
+<?php
+    $navbar = 'SELECT * FROM categories';
+
+    $navbar_statement = $db->prepare($navbar);
+    $navbar_statement->execute();
+?>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">Dee's Nuts</a>
@@ -9,18 +16,21 @@
         <li class="nav-item">
           <a class="nav-link" href="index.php">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="botanical.php">Botanical Nuts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="drupes.php">Drupes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="gymnosperm.php">Gymnosperm</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="angiosperm.php">Angiosperm</a>
-        </li>
+
+        <?php while($nav_row=$navbar_statement->fetch(PDO::FETCH_ASSOC)):?>
+
+          <?php if(is_null($nav_row['category_href']) && empty($nav_row['category_href'])):?>
+
+          <?php else:?>
+
+          <li>
+            <a class="nav-link" href="<?= $nav_row['category_href']?>.php"><?= $nav_row['category_name']?></a>
+          </li>
+
+          <?php endif?>
+
+        <?php endwhile?>
+
         <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</a>
         </li>

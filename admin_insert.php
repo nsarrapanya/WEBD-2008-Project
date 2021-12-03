@@ -4,12 +4,6 @@
 
     if(isset($_POST['btnSubmit']))
     {
-      // $product_name = $_POST['product_name'];  // Product name
-      // $product_description = $_POST['product_description'];  // Product description
-      // $product_cost = $_POST['product_cost'];  // Product cost
-      // $category_id = $_POST['category_id'];  // Category id
-      // $product_image = $_POST['product_image'];  // Product image
-
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
       $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
       $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
@@ -110,7 +104,7 @@
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
-          <input type="text" class="form-control" name="product_name">
+          <input type="text" class="form-control" name="product_name" placeholder="Almonds">
           <div id="productNameValidation" class="invalid-feedback">
             Please enter a product name.
           </div>
@@ -118,7 +112,7 @@
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
-          <textarea class="form-control" name="product_description" rows="3"></textarea>
+          <textarea class="form-control" name="product_description" rows="3" placeholder="The almond is the edible kernel of the fruit of the sweet almond tree. It is a bright white fruit wrapped in a reddish brown cover."></textarea>
           <div id="productDescValidation" class="invalid-feedback">
             Please enter a product description.
           </div>
@@ -127,17 +121,27 @@
         <div class="input-group mb-3">
           <label class="input-group-text">Category</label>
           <select class="form-select" name="category_id">
-            <option value="1">Botanical nuts</option>
-            <option value="2">Drupes</option>
-            <option value="3">Gymnosperm seeds</option>
-            <option value="4">Angiosperm seeds</option>
+
+            <?php
+                $navbar = 'SELECT * FROM categories';
+
+                $navbar_statement = $db->prepare($navbar);
+                $navbar_statement->execute();
+            ?>
+
+            <?php while($nav_row=$navbar_statement->fetch(PDO::FETCH_ASSOC)):?>
+
+              <option value="<?= $nav_row['category_id']?>"><?= $nav_row['category_name']?></option>
+
+            <?php endwhile?>
+
           </select>
         </div>
         <!-- Product cost -->
         <!-- <label class="form-label">Product cost</label> -->
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
-          <input type="text" class="form-control" name="product_cost">
+          <input type="text" class="form-control" name="product_cost" placeholder="9.99">
           <div id="productCostValidation" class="invalid-feedback">
             Please enter a product cost.
           </div>
@@ -158,7 +162,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="cancelModal">Wanring!</h5>
+            <h5 class="modal-title" id="cancelModal">Warning!</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -172,8 +176,10 @@
         </div>
       </div>
     </div>
+
     <!-- Bootstrap scripts -->
     <script src="js/bootstrap.bundle.js"></script>
+    
     <!-- Custom scripts -->
     <!-- <script src="js/scripts.js"></script> -->
   </body>
