@@ -40,7 +40,6 @@
               <th>Category ID</th>
               <th>Category</th>
               <th>Description</th>
-              <th>href</th>
             </tr>
           </thead>
         <?php if($statement->rowCount() >=1):?>
@@ -50,7 +49,6 @@
               <td><?= $row['category_id']?></td>
               <td><?= $row['category_name']?></td>
               <td><?= $row['category_description']?></td>
-              <td><?= $row['category_href']?></td>
               <td>
                 <form method="post">
                   <a class="btn btn-warning btn-sm" href="admin_categories_edit.php?category_id=<?= $row['category_id']?>">Edit</a>

@@ -11,13 +11,15 @@
       $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
       $statement->execute(array(':product_id'=>$product_id));
+
+      $row = $statement->fetch(PDO::FETCH_ASSOC);
     }
 ?>
  <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Dee's Nuts - <?= $row['product_name']?></title>
+    <title><?= $row['product_name']?></title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -44,8 +46,6 @@
 
         <?php if($statement->rowCount() >=1):?>
 
-          <?php while($row=$statement->fetch(PDO::FETCH_ASSOC)):?>
-
             <?php if(is_null($row['product_image'])): ?>
 
               <div class="col g-3">
@@ -67,12 +67,10 @@
                 <p>$<?= $row['product_cost']?></p>
                 <p>Category:
                   <br>
-                  <a href="<?= $row['category_href']?>.php" class="text-decoration-none"><?= $row['category_name']?></a>
+                  <a href="select_where.php?category_id=<?= $row['category_id']?>" class="text-decoration-none"><?= $row['category_name']?></a>
                 </p>
               </div>
             <?php endif?>
-
-          <?php endwhile?>
 
         <?php else:?>
 

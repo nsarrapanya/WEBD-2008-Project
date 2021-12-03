@@ -1,8 +1,11 @@
 <?php
-    $navbar = 'SELECT * FROM categories';
+    $query = 'SELECT * FROM categories';
 
-    $navbar_statement = $db->prepare($navbar);
+    $navbar_statement = $db->prepare($query);
     $navbar_statement->execute();
+
+    $form_statement = $db->prepare($query);
+    $form_statement->execute();
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -30,14 +33,20 @@
         </li>
       </ul>
       <form class="d-flex" method="post" action="search.php">
-        <input class="form-control me-2" type="search" name="bxQuery" placeholder="Almonds..." list="Options">
+        <div class="input-group">
+          <select class="input-group-text form-select" name="drpdwnCategory">
+
+            <?php while($form_row=$form_statement->fetch(PDO::FETCH_ASSOC)):?>
+
+              <option value="<?= $form_row['category_name']?>"><?= $form_row['category_name']?></option>
+
+            <?php endwhile?>
+
+          </select>
+          <input class="form-control me-2" type="search" name="bxQuery" placeholder="Almonds..." list="Options">
+        </div>
+
         <button class="btn btn-outline-light" type="submit" name="btnSearch">Search</button>
-        <datalist id="Options">
-          <option value="Almonds"></option>
-          <option value="Brazil nuts"></option>
-          <option value="Cashews"></option>
-          <option value="Chestnuts"></option>
-        </datalist>
       </form>
     </div>
   </div>

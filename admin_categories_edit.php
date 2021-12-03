@@ -84,10 +84,6 @@
           <label>Category description</label>
           <input type="text" class="form-control" name="category_description" placeholder="Dry, hard-shelled, compartmentalized fruit that do not split on maturity to release seeds." value="<?= $row['category_description']?>">
         </div>
-        <div class="mb-3">
-          <label>Category href</label>
-          <input type="text" class="form-control" name="category_href" placeholder="botanical" value="<?= $row['category_href']?>">
-        </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <a class="btn btn-warning" href="admin_categories.php">Cancel</a>
       </form>

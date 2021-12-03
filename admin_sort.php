@@ -1,28 +1,70 @@
 <?php
     session_start();
-    require('authenticate.php');
     require('connect.php');
 
-    $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id';
+    if(isset($_POST['radPriceASC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_cost ASC';
 
-    $statement = $db->prepare($query);
-    $statement->execute();
-?>
- <!DOCTYPE html>
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_cost ASC";
+    }
+    else if(isset($_POST['radPriceDESC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_cost DESC';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_cost DESC";
+    }
+    else if(isset($_POST['radProductASC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_name ASC';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_name ASC";
+    }
+    else if(isset($_POST['radProductDESC'])) {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id ORDER BY product_name DESC';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+
+      echo "Currently sorting: product_name DESC";
+    }
+    else {
+      $query = 'SELECT * FROM products JOIN categories ON products.category_id = categories.category_id';
+
+      $statement = $db->prepare($query);
+      $statement->execute();
+    }
+ ?>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Dee's Nuts</title>
+    <title>Dee's Nuts - Home</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
-    <script src="js/bootstrap.bundle.js"></script>
   </head>
   <body>
 
     <!-- Navbar -->
-    <?php include('admin_nav.php')?>
+    <?php
+        if(!isset($_SESSION['user_id']) || !isset($_SESSION['logged_in'])) {
+          include('nav.php');
+        }
+        else if($_SESSION['user_id'] == 1) {
+          include('admin_nav.php');
+        }
+        else {
+          include('user_nav.php');
+        }
+    ?>
 
     <!-- Container -->
     <div class="container">
@@ -96,5 +138,11 @@
         <?php endwhile?>
       </div>
     </div>
+
+    <!-- Bootstrap scripts -->
+    <script src="js/bootstrap.bundle.js"></script>
+
+    <!-- Custom scripts -->
+    <!-- <script src="js/scripts.js"></script> -->
   </body>
 </html>

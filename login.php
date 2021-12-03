@@ -10,7 +10,7 @@
         $errMSG = "Please enter you username!";
         echo $errMSG;
       }
-      else if (empty(trim($password))) {
+      else if (empty($password)) {
         $errMSG = "Please enter your password!";
         echo $errMSG;
       }
@@ -74,7 +74,7 @@
     <link href="css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
-    
+
   <main class="form-signin">
     <form method="post">
       <!-- <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->

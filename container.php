@@ -9,7 +9,7 @@
     <p>$<?= $row['product_cost']?></p>
     <p>Category:
       <br>
-      <a href="<?= $row['category_href']?>.php" class="text-decoration-none"><?= $row['category_name']?></a>
+      <a href="select_where.php?category_id=<?= $row['category_id']?>" class="text-decoration-none"><?= $row['category_name']?></a>
     </p>
     <div class="row">
       <div class="col-3">
@@ -30,7 +30,7 @@
     <p>$<?= $row['product_cost']?></p>
     <p>Category:
       <br>
-      <a href="<?= $row['category_href']?>.php" class="text-decoration-none"><?= $row['category_name']?></a>
+      <a href="select_where.php?category_id=<?= $row['category_id']?>" class="text-decoration-none"><?= $row['category_name']?></a>
     </p>
     <div class="row">
       <div class="col-3">
