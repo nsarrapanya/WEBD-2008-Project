@@ -36,6 +36,8 @@
         <div class="input-group">
           <select class="input-group-text form-select" name="drpdwnCategory">
 
+            <option value="" selected>All</option>
+
             <?php while($form_row=$form_statement->fetch(PDO::FETCH_ASSOC)):?>
 
               <option value="<?= $form_row['category_name']?>"><?= $form_row['category_name']?></option>

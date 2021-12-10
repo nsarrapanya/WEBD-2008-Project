@@ -1,7 +1,7 @@
 <?php
-    $navbar = 'SELECT * FROM categories';
+    $query = 'SELECT * FROM categories';
 
-    $navbar_statement = $db->prepare($navbar);
+    $navbar_statement = $db->prepare($query);
     $navbar_statement->execute();
 
     $form_statement = $db->prepare($query);
@@ -38,6 +38,8 @@
       <form class="d-flex" method="post" action="search.php">
         <div class="input-group">
           <select class="input-group-text form-select" name="drpdwnCategory">
+
+            <option value="" selected>All</option>
 
             <?php while($form_row=$form_statement->fetch(PDO::FETCH_ASSOC)):?>
 

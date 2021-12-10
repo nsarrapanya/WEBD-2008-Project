@@ -6,7 +6,6 @@
     if(isset($_POST['btnSubmit'])) {
       $category_name = filter_input(INPUT_POST, 'category_name', FILTER_SANITIZE_STRING);
       $category_description = filter_input(INPUT_POST, 'category_description', FILTER_SANITIZE_STRING);
-      $category_href = filter_input(INPUT_POST, 'category_href', FILTER_SANITIZE_STRING);
 
       if(empty(trim($category_name))) {
         $errMSG = "Please enter a category name.";
@@ -16,18 +15,13 @@
         $errMSG = "Please enter a category description.";
         echo $errMSG;
       }
-      else if(empty(trim($category_href))) {
-        $errMSG = "Please enter a category href.";
-        echo $errMSG;
-      }
 
       if(!isset($errMSG)) {
-        $query = 'INSERT INTO categories (category_name, category_description, category_href) VALUES (:category_name, :category_description, :category_href)';
+        $query = 'INSERT INTO categories (category_name, category_description) VALUES (:category_name, :category_description)';
 
         $statement = $db->prepare($query);
         $statement->bindParam(':category_name', $category_name);
         $statement->bindParam(':category_description', $category_description);
-        $statement->bindParam(':category_href', $category_href);
 
         if($statement->execute()) {
           header("Location: index.php");
@@ -66,10 +60,6 @@
         <div class="mb-3">
           <label>Category description</label>
           <input type="text" class="form-control" name="category_description" placeholder="Dry, hard-shelled, compartmentalized fruit that do not split on maturity to release seeds.">
-        </div>
-        <div class="mb-3">
-          <label>Category href</label>
-          <input type="text" class="form-control" name="category_href" placeholder="botanical">
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <a class="btn btn-warning" href="index.php">Cancel</a>
