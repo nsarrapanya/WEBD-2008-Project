@@ -5,7 +5,8 @@
 
     if(isset($_POST['btnSubmit'])) {
       $product_name = filter_input(INPUT_POST, 'product_name', FILTER_SANITIZE_STRING);
-      $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_STRING);
+      // $product_description = filter_input(INPUT_POST, 'product_description', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
+      $product_description = $_POST['product_description'];
       $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
       $product_cost = filter_input(INPUT_POST, 'product_cost', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
@@ -83,6 +84,14 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+    <script src="js/bootstrap.bundle.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- Summernote -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
   </head>
   <body>
 
@@ -93,22 +102,32 @@
     <div class="container">
       <form method="post" enctype="multipart/form-data" class="form-horizontal">
         <h1 class="display-6">Add a new product</h1>
+
         <!-- Product name -->
         <div class="mb-3">
           <label class="form-label">Product name</label>
           <input type="text" class="form-control" name="product_name" placeholder="Almonds">
-          <div id="productNameValidation" class="invalid-feedback">
-            Please enter a product name.
-          </div>
         </div>
+
         <!-- Product description -->
         <div class="mb-3">
           <label class="form-label">Product description</label>
-          <textarea class="form-control" name="product_description" rows="3" placeholder="The almond is the edible kernel of the fruit of the sweet almond tree. It is a bright white fruit wrapped in a reddish brown cover."></textarea>
-          <div id="productDescValidation" class="invalid-feedback">
-            Please enter a product description.
-          </div>
+          <!-- <input type="text" class="form-control" name="product_description" id="summernote"> -->
+          <textarea class="form-control" name="product_description" id="summernote"></textarea>
+          <script>
+            $(document).ready(function() {
+                $('#summernote').summernote({
+                  placeholder: 'The almond is the edible kernel of the fruit of the sweet almond tree. It is a bright white fruit wrapped in a reddish brown cover.',
+                  toolbar: [
+                    ['font', ['bold', 'italic', 'underline']],
+                    ['paragraph', ['ul', 'ol']]
+                  ],
+                  disableResizeEditor: true
+                });
+            });
+          </script>
         </div>
+
         <!-- Category id -->
         <div class="input-group mb-3">
           <label class="input-group-text">Category</label>
@@ -134,26 +153,14 @@
         <div class="input-group mb-3">
           <span class="input-group-text">$</span>
           <input type="text" class="form-control" name="product_cost" placeholder="9.99">
-          <div id="productCostValidation" class="invalid-feedback">
-            Please enter a product cost.
-          </div>
         </div>
         <!-- Product image -->
         <div class="input-group mb-3">
           <input type="file" class="form-control" aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="product_image" accept="image/*">
-          <div id="productImageValidation" class="invalid-feedback">
-            Please provide a product image.
-          </div>
         </div>
         <button type="submit" class="btn btn-success" name="btnSubmit">Submit</button>
         <a class="btn btn-warning" href="index.php">Cancel</a>
       </form>
     </div>
-
-    <!-- Bootstrap scripts -->
-    <script src="js/bootstrap.bundle.js"></script>
-
-    <!-- Custom scripts -->
-    <!-- <script src="js/scripts.js"></script> -->
   </body>
 </html>

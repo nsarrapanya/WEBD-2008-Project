@@ -119,6 +119,7 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css">
+    <script src="js/bootstrap.bundle.js"></script>
   </head>
   <body>
     <!-- Navbar -->
@@ -210,11 +211,5 @@
         </div>
       </form>
     </div>
-
-    <!-- Bootstrap scripts -->
-    <script src="js/bootstrap.bundle.js"></script>
-
-    <!-- Custom scripts -->
-    <!-- <script src="js/scripts.js"></script> -->
   </body>
 </html>

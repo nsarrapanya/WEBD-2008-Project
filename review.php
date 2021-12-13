@@ -9,9 +9,6 @@
       $statement->bindParam(':product_id', $product_id, PDO::PARAM_INT);
 
       $statement->execute(array(':product_id'=>$product_id));
-
-      // $reviews_row = $statement->fetch(PDO::FETCH_ASSOC);
-      // extract($reviews_row);
     }
 
     if(isset($_POST['btnSubmit'])) {
