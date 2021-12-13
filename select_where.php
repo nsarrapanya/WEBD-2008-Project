@@ -80,7 +80,9 @@
 
         <?php endif?>
 
-        <?php include('review.php')?>
+        <div class="col g-3">
+          <?php include('review.php')?>
+        </div>
       </div>
     </div>
     <!-- Bootstrap scripts -->

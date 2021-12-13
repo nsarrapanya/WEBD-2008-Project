@@ -19,16 +19,29 @@
       $review_lname = filter_input(INPUT_POST, 'review_lname', FILTER_SANITIZE_STRING);
       $review_comment = filter_input(INPUT_POST, 'review_comment', FILTER_SANITIZE_STRING);
       $product_id = filter_input(INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT);
+      $user_captcha = filter_input(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
 
       if(empty($review_fname)) {
         $errMSG = "You must provide your first name";
+        echo $errMSG;
       }
       else if(empty($review_lname)) {
         $errMSG = "You must provide your last name";
+        echo $errMSG;
       }
       else if(empty($review_comment)) {
         $errMSG = "You must enter a comment";
+        echo $errMSG;
       }
+      else if(empty($user_captcha)) {
+        $errMSG = "You must enter a captcha";
+        echo $errMSG;
+      }
+      else if($user_captcha != $_SESSION['captcha']) {
+        $errMSG = "Incorrect captcha. Please try again";
+        echo $errMSG;
+      }
+
 
       if(!isset($errMSG)) {
         $query = 'INSERT INTO reviews (review_fname, review_lname, review_comment, product_id) VALUES (:review_fname, :review_lname, :review_comment, :product_id)';
@@ -88,27 +101,71 @@
   <?php endif?>
 <!-- Form -->
 <div class="row">
+
+  <?php if($_SESSION['captcha']):?>
+    <?php if(isset($errMSG)):?>
+
   <form class="form-horizontal col gx-3 gy-3" method="post">
-    <div class="row gy-3">
-      <div class="col">
-        <label for="">First name</label>
-        <input type="text" class="form-control" name="review_fname">
+    <div class="row">
+      <div class="mb-3 col-6">
+        <label class="form-label">First name</label>
+        <input type="text" class="form-control" name="review_fname" placeholder="Addie" value="<?= $review_fname ?>">
       </div>
-      <div class="col">
-        <label for="">Last Name</label>
-        <input type="text" class="form-control" name="review_lname">
+      <div class="mb-3 col-6">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="review_lname" placeholder="Smith" value="<?= $review_lname ?>">
+      </div>
+      <div class="mb-3 col-12">
+        <label class="form-label">Comment</label>
+        <textarea class="form-control" rows="3" name="review_comment" placeholder="Dee's Nuts are amazing!"><?= $review_comment ?></textarea>
+      </div>
+      <div class="mb-3 col">
+        <label class="form-label">Captcha</label>
+        <div class="row">
+          <img src="captcha.php" alt="captcha" class="col-3">
+          <input type="text" class="form-control col" name="captcha">
+        </div>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <label for="" class="form-label">Comment</label>
-        <textarea class="form-control" rows="3" name="review_comment"></textarea>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col gy-3">
         <button type="submit" class="btn btn-primary" name="btnSubmit">Submit</button>
       </div>
     </div>
   </form>
+
+    <?php else:?>
+
+  <form class="form-horizontal col gx-3 gy-3" method="post">
+    <div class="row">
+      <div class="mb-3 col-6">
+        <label class="form-label">First name</label>
+        <input type="text" class="form-control" name="review_fname" placeholder="Addie">
+      </div>
+      <div class="mb-3 col-6">
+        <label class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="review_lname" placeholder="Smith">
+      </div>
+      <div class="mb-3 col-12">
+        <label class="form-label">Comment</label>
+        <textarea class="form-control" rows="3" name="review_comment" placeholder="Dee's Nuts are amazing!"></textarea>
+      </div>
+      <div class="mb-3 col">
+        <label class="form-label">Captcha</label>
+        <div class="row">
+          <img src="captcha.php" alt="captcha" class="col-3">
+          <input type="text" class="form-control col" name="captcha">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button type="submit" class="btn btn-primary" name="btnSubmit">Submit</button>
+      </div>
+    </div>
+  </form>
+
+    <?php endif?>
+  <?php endif?>
+
 </div>
